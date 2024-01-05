@@ -51,7 +51,7 @@ public class PanneauJeu extends JPanel implements Runnable{
     }
 
     public void actualiser(){
-        if(EcouterTouche.pause == false){
+        if(EcouterTouche.pause == false && mj.gameOver == false){
             mj.actualiser();
         }
     }

@@ -31,6 +31,14 @@ public class ManageurJeu {
 
     public static int dropInterval = 60;
 
+    //effect
+    boolean conteurEffectOn;
+    int conteurEffect;
+    ArrayList<Integer> effectY = new ArrayList<>();
+
+    //game over
+    boolean gameOver;
+
     public ManageurJeu(){
         left_x = (PanneauJeu.LARGEUR / 2) - (LARGEUR / 2);
         right_x = left_x + LARGEUR;
@@ -60,6 +68,10 @@ public class ManageurJeu {
             blocksMinoPrecedant.add(this.minoCourant.block[2]);
             blocksMinoPrecedant.add(this.minoCourant.block[3]);
 
+            //si game over
+            if(this.minoCourant.block[0].x == MINO_START_X && this.minoCourant.block[0].y == MINO_START_Y){
+                gameOver = true;
+            }
             this.minoCourant.desactivationEnCours = false;
 
             //changer de tetra mino courant
@@ -105,13 +117,39 @@ public class ManageurJeu {
             blocksMinoPrecedant.get(i).dessiner(g2);
         }
 
+        //dessiner les game over
+        if(gameOver){
+            g2.setColor(Color.red);
+            g2.setFont(g2.getFont().deriveFont(50f));
+
+            x = left_x + 25;
+            y = top_y + 320;
+            g2.drawString("GAME OVER", x, y);
+        }
         //afficher pause
-        g2.setColor(Color.yellow);
-        g2.setFont(g2.getFont().deriveFont(50f));
-        if(EcouterTouche.pause){
+        else if(EcouterTouche.pause){
+            g2.setColor(Color.yellow);
+            g2.setFont(g2.getFont().deriveFont(50f));
+
             x = left_x + 70;
             y = top_y + 320;
             g2.drawString("PAUSE", x, y);
+        }
+
+        //dessiner l'effect l'hors de la suppression d'une ligne
+        if(conteurEffectOn){
+            conteurEffect++;
+
+            g2.setColor(Color.white);
+            for(int i = 0; i < effectY.size(); i++){
+                g2.fillRect(left_x, effectY.get(i), LARGEUR, Block.TAILLE );
+            }
+
+            if(conteurEffect == 10){
+                conteurEffectOn = false;
+                conteurEffect = 0;
+                effectY.clear();
+            }
         }
 
     }
@@ -152,6 +190,10 @@ public class ManageurJeu {
             if(x == right_x){
                 
                 if(nombreBlocks == 12){
+                    //effect de la suppression de la ligne
+                    conteurEffectOn = true;
+                    effectY.add(y);
+
                     //effacer la ligne
                     for(int i = blocksMinoPrecedant.size() - 1; i >= 0; i--){
                         if(blocksMinoPrecedant.get(i).y == y){
