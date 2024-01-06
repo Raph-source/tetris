@@ -6,11 +6,12 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import mino.*;
 
-public class ManageurJeu {
+public class ManageurJeuB {
     //Block du jouer A
     final int LARGEUR = 360;
     final int  HAUTEUR = 600;
@@ -18,6 +19,9 @@ public class ManageurJeu {
     public static int right_x;
     public static int top_y;
     public static int botton_y;
+
+    //la file de tetra mino
+    public Queue<Mino> fileMino;
 
     //mino courant
     Mino minoCourant;
@@ -39,7 +43,7 @@ public class ManageurJeu {
     //game over
     boolean gameOver;
 
-    public ManageurJeu(){
+    public ManageurJeuB(){
         left_x = (PanneauJeu.LARGEUR / 2) - (LARGEUR / 2);
         right_x = left_x + LARGEUR;
         top_y = 50;
@@ -51,13 +55,24 @@ public class ManageurJeu {
         MINOSUIVANT_X = right_x + 175;        
         MINOSUIVANT_Y = top_y + 500;
 
-        //le tetra mino courant
-        minoCourant = this.genererMino();
+        //la file de tetra mino
+        fileMino = new LinkedList<>();
+    }
+
+    //premier tetra mino
+    public void premierMino(){
+        //le tetra mino courant     
+        minoCourant = fileMino.poll();
+        /*
+            {
+                envoyer le mino courant au jouer B
+            }
+        */
+
         minoCourant.setXY(MINO_START_X, MINO_START_Y);
         //le tetra mino suivant
-        minoSuivant = this.genererMino();
+        minoSuivant = fileMino.remove();;
         minoSuivant.setXY(MINOSUIVANT_X, MINOSUIVANT_Y);
-
     }
 
     public void actualiser(){
@@ -76,10 +91,15 @@ public class ManageurJeu {
 
             //changer de tetra mino courant
             this.minoCourant = this.minoSuivant;
+            /*
+                {
+                    envoyer le mino courant au jouer B
+                }
+            */
             this.minoCourant.setXY(MINO_START_X, MINO_START_Y);
 
             //generer un autre tetra mino suivant
-            this.minoSuivant = this.genererMino();
+            this.minoSuivant = fileMino.poll();;
             this.minoSuivant.setXY(MINOSUIVANT_X, MINOSUIVANT_Y);
 
             //vérifier si les lignes sont supprimables
@@ -154,25 +174,6 @@ public class ManageurJeu {
 
     }
 
-    //generer un tetra mino
-    private Mino genererMino(){
-        Mino mino = null;
-
-        int num = new Random().nextInt(7);
-
-        switch (num) {
-            case 0: mino = new Mino_l1();break;            
-            case 1: mino = new Mino_l2();break;
-            case 2: mino = new Mino_t();break;
-            case 3: mino = new Mino_z1();break;
-            case 4: mino = new Mino_z2();break;
-            case 5: mino = new Mino_carre();break;
-            case 6: mino = new Mino_bar();break;
-        }
-
-        return mino;
-    }
-
     private void checkDelete(){
         int x = left_x;
         int y = top_y;
@@ -218,3 +219,4 @@ public class ManageurJeu {
         }
     }
 }
+

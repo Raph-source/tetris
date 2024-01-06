@@ -10,8 +10,9 @@ public class PanneauJeu extends JPanel implements Runnable{
     public static final int HAUTEUR = 720;
     final int FPS = 60; // nombre de fois par seconde
     Thread threadJeu;
-    ManageurJeu mj;
-
+    ManageurJeuA mjA;
+    ManageurJeuB mjB;
+    GenerateurMino generateurMino;
     public PanneauJeu(){
         this.setPreferredSize(new Dimension(LARGEUR, HAUTEUR));
         this.setBackground(Color.black);
@@ -20,8 +21,21 @@ public class PanneauJeu extends JPanel implements Runnable{
         //l'ecouteur des touches
         this.addKeyListener(new EcouterTouche());
         this.setFocusable(true);
+        
+        //les manageurs de jeu
+        this.mjA = new ManageurJeuA();        
+        this.mjB = new ManageurJeuB();
 
-        mj = new ManageurJeu();
+        //le générateur de tetra mino
+        generateurMino = new GenerateurMino(this.mjA, this.mjB);
+
+        //générer les premiers tetra mino
+        generateurMino.genererMino();            
+        generateurMino.genererMino();
+
+        this.mjA.premierMino();        
+        this.mjB.premierMino();
+
     }
 
     public void lancerJeu(){
@@ -37,6 +51,14 @@ public class PanneauJeu extends JPanel implements Runnable{
         long lastTime = System.nanoTime();
         long currentTime;
 
+        //tester la connexion entre les deux machines
+        /*
+            {
+                A FAIRE
+            }
+        */
+        
+        //lancer le game loop
         while(this.threadJeu != null){
             currentTime = System.nanoTime();
             deltat += (currentTime - lastTime) / drawInterval;
@@ -51,8 +73,13 @@ public class PanneauJeu extends JPanel implements Runnable{
     }
 
     public void actualiser(){
-        if(EcouterTouche.pause == false && mj.gameOver == false){
-            mj.actualiser();
+        if(EcouterTouche.pause == false && mjA.gameOver == false){//il faut ajouter le teste du game du deuxieme joueur
+            mjA.actualiser();
+        }
+
+        if(mjA.minoCourant.active == false){
+            generateurMino.genererMino();            
+            generateurMino.genererMino();
         }
     }
 
@@ -60,6 +87,6 @@ public class PanneauJeu extends JPanel implements Runnable{
         super.paintComponent(g);
 
         Graphics2D g2 = (Graphics2D)g;
-        mj.dessiner(g2);
+        mjA.dessiner(g2);
     }
 }

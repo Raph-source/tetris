@@ -2,7 +2,7 @@ package mino;
 
 import java.awt.*;
 
-import tetris.ManageurJeu;
+import tetris.ManageurJeuA;
 
 public class Mino {
     public Block block[] = new Block[4];    
@@ -111,7 +111,7 @@ public class Mino {
         else{
             autoDropCounter++;
 
-            if(autoDropCounter == ManageurJeu.dropInterval){
+            if(autoDropCounter == ManageurJeuA.dropInterval){
                 //le tetras mino descend
                 this.block[0].y += Block.TAILLE;            
                 this.block[1].y += Block.TAILLE;
@@ -149,21 +149,21 @@ public class Mino {
         this.checkBlocksCollision();
         //collision gauche
         for(int i = 0; i < this.block.length; i++){
-            if(this.block[i].x == ManageurJeu.left_x){
+            if(this.block[i].x == ManageurJeuA.left_x){
                 collisionGauche = true;
             }
         }
 
         //collision droite
         for(int i = 0; i < this.block.length; i++){
-            if(this.block[i].x + Block.TAILLE == ManageurJeu.right_x){
+            if(this.block[i].x + Block.TAILLE == ManageurJeuA.right_x){
                 collisionDroite = true;
             }
         }
 
         //collision bas
         for(int i = 0; i < this.block.length; i++){
-            if(this.block[i].y + Block.TAILLE == ManageurJeu.botton_y){
+            if(this.block[i].y + Block.TAILLE == ManageurJeuA.botton_y){
                 collisionBas = true;
             }
         }
@@ -178,30 +178,30 @@ public class Mino {
 
         //collision gauche
         for(int i = 0; i < this.block.length; i++){
-            if(this.tempB[i].x < ManageurJeu.left_x){
+            if(this.tempB[i].x < ManageurJeuA.left_x){
                 collisionGauche = true;
             }
         }
 
         //collision droite
         for(int i = 0; i < this.block.length; i++){
-            if(this.tempB[i].x + Block.TAILLE > ManageurJeu.right_x){
+            if(this.tempB[i].x + Block.TAILLE > ManageurJeuA.right_x){
                 collisionDroite = true;
             }
         }
 
         //collision bas
         for(int i = 0; i < this.block.length; i++){
-            if(this.tempB[i].y + Block.TAILLE > ManageurJeu.botton_y){
+            if(this.tempB[i].y + Block.TAILLE > ManageurJeuA.botton_y){
                 collisionBas = true;
             }
         }
     }
 
     private void checkBlocksCollision(){
-        for(int i = 0; i < ManageurJeu.blocksMinoPrecedant.size(); i++){
-            int blockX = ManageurJeu.blocksMinoPrecedant.get(i).x;            
-            int blockY = ManageurJeu.blocksMinoPrecedant.get(i).y;
+        for(int i = 0; i < ManageurJeuA.blocksMinoPrecedant.size(); i++){
+            int blockX = ManageurJeuA.blocksMinoPrecedant.get(i).x;            
+            int blockY = ManageurJeuA.blocksMinoPrecedant.get(i).y;
 
             //verifier vers le bas
             for(int j = 0; j < this.block.length; j++){
