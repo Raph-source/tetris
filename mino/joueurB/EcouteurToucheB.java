@@ -1,10 +1,10 @@
-package mino;
+package mino.joueurB;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class EcouterTouche implements KeyListener{
-    public static boolean droite, gauche, haut, bas, pause;
+public class EcouteurToucheB implements KeyListener{
+    public boolean droite, gauche, haut, bas, pause;
 
     @Override
     public void keyTyped(KeyEvent ev){}

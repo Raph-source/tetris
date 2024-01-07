@@ -1,8 +1,9 @@
-package mino;
+package mino.joueurB;
 
 import java.awt.*;
 
-import tetris.ManageurJeuA;
+import mino.Block;
+import tetris.ManageurJeuB;
 
 public class Mino {
     public Block block[] = new Block[4];    
@@ -15,6 +16,12 @@ public class Mino {
     public boolean desactivationEnCours;
     int conteurDesactivation = 0;
 
+    //ecouteur des touches
+    public EcouteurToucheB ecouteurToucheB;
+
+    public Mino(EcouteurToucheB ecouteurToucheB){
+        this.ecouteurToucheB = ecouteurToucheB;
+    }
     public void creer(Color couleur){
         this.block[0] = new Block(couleur);        
         this.block[1] = new Block(couleur);
@@ -54,7 +61,7 @@ public class Mino {
             this.desactivation();
         }
         //gestion des touches
-        if(EcouterTouche.haut){
+        if(this.ecouteurToucheB.haut){
             switch (this.direction) {
                 case 1: getDirection2();break;                
                 case 2: getDirection3();break;
@@ -62,13 +69,13 @@ public class Mino {
                 case 4: getDirection1();break;
 
             }
-            EcouterTouche.haut = false;
+            this.ecouteurToucheB.haut = false;
         }
 
         //teste des collisions
         this.checkMovementCollision();
         
-        if(EcouterTouche.bas){
+        if(this.ecouteurToucheB.bas){
             //si la collision bas n'est pas
             if(collisionBas == false){
                 this.block[0].y += Block.TAILLE;            
@@ -78,10 +85,10 @@ public class Mino {
 
                 autoDropCounter = 0;
             }
-            EcouterTouche.bas = false;
+            this.ecouteurToucheB.bas = false;
 
         }
-        if(EcouterTouche.gauche){
+        if(this.ecouteurToucheB.gauche){
             //si la collision gauche n'est pas
             if(collisionGauche == false){
                 this.block[0].x -= Block.TAILLE;            
@@ -90,9 +97,9 @@ public class Mino {
                 this.block[3].x -= Block.TAILLE;
             }
 
-            EcouterTouche.gauche = false;
+            this.ecouteurToucheB.gauche = false;
         }
-        if(EcouterTouche.droite){
+        if(this.ecouteurToucheB.droite){
             //si la collision droite n'est pas
             if(collisionDroite == false){
                 this.block[0].x += Block.TAILLE;            
@@ -101,7 +108,7 @@ public class Mino {
                 this.block[3].x += Block.TAILLE;
             }
 
-            EcouterTouche.droite = false;
+            this.ecouteurToucheB.droite = false;
         }
 
         if(collisionBas){
@@ -111,7 +118,7 @@ public class Mino {
         else{
             autoDropCounter++;
 
-            if(autoDropCounter == ManageurJeuA.dropInterval){
+            if(autoDropCounter == ManageurJeuB.dropInterval){
                 //le tetras mino descend
                 this.block[0].y += Block.TAILLE;            
                 this.block[1].y += Block.TAILLE;
@@ -149,21 +156,21 @@ public class Mino {
         this.checkBlocksCollision();
         //collision gauche
         for(int i = 0; i < this.block.length; i++){
-            if(this.block[i].x == ManageurJeuA.left_x){
+            if(this.block[i].x == ManageurJeuB.left_x){
                 collisionGauche = true;
             }
         }
 
         //collision droite
         for(int i = 0; i < this.block.length; i++){
-            if(this.block[i].x + Block.TAILLE == ManageurJeuA.right_x){
+            if(this.block[i].x + Block.TAILLE == ManageurJeuB.right_x){
                 collisionDroite = true;
             }
         }
 
         //collision bas
         for(int i = 0; i < this.block.length; i++){
-            if(this.block[i].y + Block.TAILLE == ManageurJeuA.botton_y){
+            if(this.block[i].y + Block.TAILLE == ManageurJeuB.botton_y){
                 collisionBas = true;
             }
         }
@@ -178,30 +185,30 @@ public class Mino {
 
         //collision gauche
         for(int i = 0; i < this.block.length; i++){
-            if(this.tempB[i].x < ManageurJeuA.left_x){
+            if(this.tempB[i].x < ManageurJeuB.left_x){
                 collisionGauche = true;
             }
         }
 
         //collision droite
         for(int i = 0; i < this.block.length; i++){
-            if(this.tempB[i].x + Block.TAILLE > ManageurJeuA.right_x){
+            if(this.tempB[i].x + Block.TAILLE > ManageurJeuB.right_x){
                 collisionDroite = true;
             }
         }
 
         //collision bas
         for(int i = 0; i < this.block.length; i++){
-            if(this.tempB[i].y + Block.TAILLE > ManageurJeuA.botton_y){
+            if(this.tempB[i].y + Block.TAILLE > ManageurJeuB.botton_y){
                 collisionBas = true;
             }
         }
     }
 
     private void checkBlocksCollision(){
-        for(int i = 0; i < ManageurJeuA.blocksMinoPrecedant.size(); i++){
-            int blockX = ManageurJeuA.blocksMinoPrecedant.get(i).x;            
-            int blockY = ManageurJeuA.blocksMinoPrecedant.get(i).y;
+        for(int i = 0; i < ManageurJeuB.blocksMinoPrecedant.size(); i++){
+            int blockX = ManageurJeuB.blocksMinoPrecedant.get(i).x;            
+            int blockY = ManageurJeuB.blocksMinoPrecedant.get(i).y;
 
             //verifier vers le bas
             for(int j = 0; j < this.block.length; j++){

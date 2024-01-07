@@ -1,9 +1,12 @@
-package mino;
+package mino.joueurB;
 
 import java.awt.Color;
 
+import mino.Block;
+
 public class Mino_bar extends Mino{
-    public Mino_bar(){
+    public Mino_bar(EcouteurToucheB ecouteurToucheB){
+        super(ecouteurToucheB);
         this.creer(Color.cyan);
     }
 

@@ -1,10 +1,13 @@
-package mino;
+package mino.joueurB;
 
 import java.awt.Color;
 
-public class Mino_t extends Mino{
-    public Mino_t(){
-        this.creer(Color.magenta);
+import mino.Block;
+
+public class Mino_l2 extends Mino{
+    public Mino_l2(EcouteurToucheB ecouteurToucheB){
+        super(ecouteurToucheB);
+        this.creer(Color.blue);
     }
 
     public void setXY(int x, int y){
@@ -12,10 +15,10 @@ public class Mino_t extends Mino{
         this.block[0].y = y;
         this.block[1].x = this.block[0].x;
         this.block[1].y = this.block[0].y - Block.TAILLE;
-        this.block[2].x = this.block[0].x - Block.TAILLE;
-        this.block[2].y = this.block[0].y;
-        this.block[3].x = this.block[0].x + Block.TAILLE;
-        this.block[3].y = this.block[0].y;
+        this.block[2].x = this.block[0].x;
+        this.block[2].y = this.block[0].y + Block.TAILLE;
+        this.block[3].x = this.block[0].x - Block.TAILLE;
+        this.block[3].y = this.block[0].y + Block.TAILLE;
 
     }
 
@@ -24,10 +27,10 @@ public class Mino_t extends Mino{
         this.tempB[0].y = this.block[0].y;
         this.tempB[1].x = this.block[0].x;
         this.tempB[1].y = this.block[0].y - Block.TAILLE;
-        this.tempB[2].x = this.block[0].x - Block.TAILLE;
-        this.tempB[2].y = this.block[0].y;
-        this.tempB[3].x = this.block[0].x + Block.TAILLE;
-        this.tempB[3].y = this.block[0].y;
+        this.tempB[2].x = this.block[0].x;
+        this.tempB[2].y = this.block[0].y + Block.TAILLE;
+        this.tempB[3].x = this.block[0].x - Block.TAILLE;
+        this.tempB[3].y = this.block[0].y + Block.TAILLE;
 
         this.actualiserXY(1);
 
@@ -37,10 +40,10 @@ public class Mino_t extends Mino{
         this.tempB[0].y = this.block[0].y;
         this.tempB[1].x = this.block[0].x + Block.TAILLE;
         this.tempB[1].y = this.block[0].y;
-        this.tempB[2].x = this.block[0].x;
-        this.tempB[2].y = this.block[0].y - Block.TAILLE;
-        this.tempB[3].x = this.block[0].x;
-        this.tempB[3].y = this.block[0].y + Block.TAILLE;
+        this.tempB[2].x = this.block[0].x - Block.TAILLE;
+        this.tempB[2].y = this.block[0].y;
+        this.tempB[3].x = this.block[0].x - Block.TAILLE;
+        this.tempB[3].y = this.block[0].y - Block.TAILLE;
 
         this.actualiserXY(2);
     }
@@ -49,10 +52,10 @@ public class Mino_t extends Mino{
         this.tempB[0].y = this.block[0].y;
         this.tempB[1].x = this.block[0].x;
         this.tempB[1].y = this.block[0].y + Block.TAILLE;
-        this.tempB[2].x = this.block[0].x + Block.TAILLE;
-        this.tempB[2].y = this.block[0].y;
-        this.tempB[3].x = this.block[0].x - Block.TAILLE;
-        this.tempB[3].y = this.block[0].y;
+        this.tempB[2].x = this.block[0].x;
+        this.tempB[2].y = this.block[0].y - Block.TAILLE;
+        this.tempB[3].x = this.block[0].x + Block.TAILLE;
+        this.tempB[3].y = this.block[0].y - Block.TAILLE;
 
         this.actualiserXY(3);
     }
@@ -61,10 +64,10 @@ public class Mino_t extends Mino{
         this.tempB[0].y = this.block[0].y;
         this.tempB[1].x = this.block[0].x - Block.TAILLE;
         this.tempB[1].y = this.block[0].y;
-        this.tempB[2].x = this.block[0].x;
-        this.tempB[2].y = this.block[0].y + Block.TAILLE;
-        this.tempB[3].x = this.block[0].x;
-        this.tempB[3].y = this.block[0].y - Block.TAILLE;
+        this.tempB[2].x = this.block[0].x + Block.TAILLE;
+        this.tempB[2].y = this.block[0].y;
+        this.tempB[3].x = this.block[0].x + Block.TAILLE;
+        this.tempB[3].y = this.block[0].y + Block.TAILLE;
 
         this.actualiserXY(4);
     }

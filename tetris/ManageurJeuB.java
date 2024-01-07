@@ -2,14 +2,14 @@ package tetris;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
 import mino.*;
+import mino.joueurB.EcouteurToucheB;
+import mino.joueurB.Mino;
 
 public class ManageurJeuB {
     //Block du jouer A
@@ -24,11 +24,12 @@ public class ManageurJeuB {
     public Queue<Mino> fileMino;
 
     //mino courant
-    Mino minoCourant;
+    public Mino minoCourant;
     final int MINO_START_X;    
     final int MINO_START_Y;
+
     //mino suivant
-    Mino minoSuivant;
+    public Mino minoSuivant;
     final int MINOSUIVANT_X;    
     final int MINOSUIVANT_Y;
     public static ArrayList<Block> blocksMinoPrecedant = new ArrayList<>();
@@ -43,8 +44,13 @@ public class ManageurJeuB {
     //game over
     boolean gameOver;
 
-    public ManageurJeuB(){
-        left_x = (PanneauJeu.LARGEUR / 2) - (LARGEUR / 2);
+    //ecouteur des touches
+    public EcouteurToucheB ecouteurToucheB;
+
+    public ManageurJeuB(EcouteurToucheB ecouteurToucheB){
+        //ecouteur des touches
+        this.ecouteurToucheB = new EcouteurToucheB();
+        left_x = PanneauJeu.LARGEUR - 400;
         right_x = left_x + LARGEUR;
         top_y = 50;
         botton_y = top_y + HAUTEUR;
@@ -56,23 +62,23 @@ public class ManageurJeuB {
         MINOSUIVANT_Y = top_y + 500;
 
         //la file de tetra mino
-        fileMino = new LinkedList<>();
+        this.fileMino = new LinkedList<>();
     }
 
     //premier tetra mino
     public void premierMino(){
         //le tetra mino courant     
-        minoCourant = fileMino.poll();
+        this.minoCourant = this.fileMino.poll();
         /*
             {
                 envoyer le mino courant au jouer B
             }
         */
 
-        minoCourant.setXY(MINO_START_X, MINO_START_Y);
+        this.minoCourant.setXY(MINO_START_X, MINO_START_Y);
         //le tetra mino suivant
-        minoSuivant = fileMino.remove();;
-        minoSuivant.setXY(MINOSUIVANT_X, MINOSUIVANT_Y);
+        this.minoSuivant = this.fileMino.poll();;
+        this.minoSuivant.setXY(MINOSUIVANT_X, MINOSUIVANT_Y);
     }
 
     public void actualiser(){
@@ -99,38 +105,31 @@ public class ManageurJeuB {
             this.minoCourant.setXY(MINO_START_X, MINO_START_Y);
 
             //generer un autre tetra mino suivant
-            this.minoSuivant = fileMino.poll();;
+            this.minoSuivant = this.fileMino.poll();
             this.minoSuivant.setXY(MINOSUIVANT_X, MINOSUIVANT_Y);
 
             //vérifier si les lignes sont supprimables
             this.checkDelete();
         }
         else{
-            minoCourant.actualiser();
+            this.minoCourant.actualiser();
         }
     }
 
     public void dessiner(Graphics2D g2){
-        //dessiner la partie du joueur A
+        //dessiner la partie du joueur B
         g2.setColor(Color.white);
         g2.setStroke(new BasicStroke(4f));
         g2.drawRect(left_x - 4, top_y - 4, LARGEUR + 8, HAUTEUR + 8);
 
-        //cadre du tetra mino suivant
-        int x = right_x + 100;        
-        int y = botton_y - 200;
-        g2.drawRect(x, y, 200, 200);
-        g2.setFont(new Font("Arial", Font.PLAIN, 30));
-        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        g2.drawString("SUIVANT", x + 60, y + 60);
+        //coordonée des messages (game over et pause)
+        int x;      
+        int y;
 
         //dessiner le mino courant
-        if(minoCourant != null){
-            minoCourant.dessiner(g2);
+        if(this.minoCourant != null){
+            this.minoCourant.dessiner(g2);
         }
-
-        //dessiner le mino suivant
-        minoSuivant.dessiner(g2);
         
         //dessiner les blocks static
         for(int i = 0; i < blocksMinoPrecedant.size(); i++){
@@ -147,7 +146,7 @@ public class ManageurJeuB {
             g2.drawString("GAME OVER", x, y);
         }
         //afficher pause
-        else if(EcouterTouche.pause){
+        else if(this.ecouteurToucheB.pause){
             g2.setColor(Color.yellow);
             g2.setFont(g2.getFont().deriveFont(50f));
 

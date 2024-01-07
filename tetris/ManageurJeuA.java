@@ -10,6 +10,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import mino.*;
+import mino.joueurA.EcouteurToucheA;
+import mino.joueurA.Mino;
 
 public class ManageurJeuA {
     //Block du jouer A
@@ -19,6 +21,9 @@ public class ManageurJeuA {
     public static int right_x;
     public static int top_y;
     public static int botton_y;
+    
+    //ecouteur des touoches
+    private EcouteurToucheA ecouteurToucheA;
 
     //la file de tetra mino
     public Queue<Mino> fileMino;
@@ -27,8 +32,9 @@ public class ManageurJeuA {
     public Mino minoCourant;
     final int MINO_START_X;    
     final int MINO_START_Y;
+
     //mino suivant
-    Mino minoSuivant;
+    public Mino minoSuivant;
     final int MINOSUIVANT_X;    
     final int MINOSUIVANT_Y;
     public static ArrayList<Block> blocksMinoPrecedant = new ArrayList<>();
@@ -43,8 +49,8 @@ public class ManageurJeuA {
     //game over
     boolean gameOver;
 
-    public ManageurJeuA(){
-        left_x = (PanneauJeu.LARGEUR / 2) - (LARGEUR / 2);
+    public ManageurJeuA(EcouteurToucheA ecouteurToucheA){
+        left_x = PanneauJeu.LARGEUR - 1200;
         right_x = left_x + LARGEUR;
         top_y = 50;
         botton_y = top_y + HAUTEUR;
@@ -54,9 +60,12 @@ public class ManageurJeuA {
 
         MINOSUIVANT_X = right_x + 175;        
         MINOSUIVANT_Y = top_y + 500;
-        
+
         //la file de tetra mino
-        fileMino = new LinkedList<>();
+        this.fileMino = new LinkedList<>();
+
+        //ecouteur des touches
+        this.ecouteurToucheA = ecouteurToucheA;
 
     }
 
@@ -64,17 +73,17 @@ public class ManageurJeuA {
     public void premierMino(){
 
         //le tetra mino courant     
-        minoCourant = fileMino.poll();
+        this.minoCourant = this.fileMino.poll();
         /*
             {
                 envoyer le mino courant au jouer B
             }
         */
 
-        minoCourant.setXY(MINO_START_X, MINO_START_Y);
+        this.minoCourant.setXY(MINO_START_X, MINO_START_Y);
         //le tetra mino suivant
-        minoSuivant = fileMino.remove();;
-        minoSuivant.setXY(MINOSUIVANT_X, MINOSUIVANT_Y);
+        this.minoSuivant = this.fileMino.poll();;
+        this.minoSuivant.setXY(MINOSUIVANT_X, MINOSUIVANT_Y);
     }
 
     public void actualiser(){
@@ -101,14 +110,14 @@ public class ManageurJeuA {
             this.minoCourant.setXY(MINO_START_X, MINO_START_Y);
 
             //generer un autre tetra mino suivant
-            this.minoSuivant = fileMino.poll();;
+            this.minoSuivant = this.fileMino.poll();
             this.minoSuivant.setXY(MINOSUIVANT_X, MINOSUIVANT_Y);
 
             //vérifier si les lignes sont supprimables
             this.checkDelete();
         }
         else{
-            minoCourant.actualiser();
+            this.minoCourant.actualiser();
         }
     }
 
@@ -127,8 +136,8 @@ public class ManageurJeuA {
         g2.drawString("SUIVANT", x + 60, y + 60);
 
         //dessiner le mino courant
-        if(minoCourant != null){
-            minoCourant.dessiner(g2);
+        if(this.minoCourant != null){
+            this.minoCourant.dessiner(g2);
         }
 
         //dessiner le mino suivant
@@ -149,7 +158,7 @@ public class ManageurJeuA {
             g2.drawString("GAME OVER", x, y);
         }
         //afficher pause
-        else if(EcouterTouche.pause){
+        else if(this.ecouteurToucheA.pause){
             g2.setColor(Color.yellow);
             g2.setFont(g2.getFont().deriveFont(50f));
 

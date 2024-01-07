@@ -3,7 +3,10 @@ package tetris;
 import java.awt.*;
 import javax.swing.*;
 
-import mino.EcouterTouche;
+import mino.joueurA.EcouteurToucheA;
+import mino.joueurB.EcouteurToucheB;
+
+
 
 public class PanneauJeu extends JPanel implements Runnable{
     public static final int LARGEUR = 1280;    
@@ -13,21 +16,33 @@ public class PanneauJeu extends JPanel implements Runnable{
     ManageurJeuA mjA;
     ManageurJeuB mjB;
     GenerateurMino generateurMino;
+
+    //ecouteur des touches
+    private EcouteurToucheA ecouteurToucheA;    
+    private EcouteurToucheB ecouteurToucheB;
+
+
     public PanneauJeu(){
         this.setPreferredSize(new Dimension(LARGEUR, HAUTEUR));
         this.setBackground(Color.black);
         this.setLayout(null);
 
+        //ecouteur de touches
+        this.ecouteurToucheA = new EcouteurToucheA();        
+        this.ecouteurToucheB = new EcouteurToucheB();
+
         //l'ecouteur des touches
-        this.addKeyListener(new EcouterTouche());
+        this.addKeyListener(this.ecouteurToucheA);        
+        this.addKeyListener(this.ecouteurToucheB);
+
         this.setFocusable(true);
         
         //les manageurs de jeu
-        this.mjA = new ManageurJeuA();        
-        this.mjB = new ManageurJeuB();
+        this.mjA = new ManageurJeuA(this.ecouteurToucheA);        
+        this.mjB = new ManageurJeuB(this.ecouteurToucheB);
 
         //le générateur de tetra mino
-        generateurMino = new GenerateurMino(this.mjA, this.mjB);
+        generateurMino = new GenerateurMino(this.mjA, this.mjB, this.ecouteurToucheA, this.ecouteurToucheB);
 
         //générer les premiers tetra mino
         generateurMino.genererMino();            
@@ -73,8 +88,9 @@ public class PanneauJeu extends JPanel implements Runnable{
     }
 
     public void actualiser(){
-        if(EcouterTouche.pause == false && mjA.gameOver == false){//il faut ajouter le teste du game du deuxieme joueur
+        if(this.ecouteurToucheA.pause == false && mjA.gameOver == false){//il faut ajouter le teste du game du deuxieme joueur
             mjA.actualiser();
+            mjB.actualiser();
         }
 
         if(mjA.minoCourant.active == false){
@@ -88,5 +104,6 @@ public class PanneauJeu extends JPanel implements Runnable{
 
         Graphics2D g2 = (Graphics2D)g;
         mjA.dessiner(g2);
+        mjB.dessiner(g2);
     }
 }
