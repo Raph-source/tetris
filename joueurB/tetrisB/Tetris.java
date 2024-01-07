@@ -1,5 +1,7 @@
 package tetrisB;
 
+import java.net.Socket;
+
 import javax.swing.JFrame;
 
 import tetrisA.PanneauJeu;
@@ -14,6 +16,15 @@ public class Tetris {
         PanneauJeu pj = new PanneauJeu();
         fenetre.add(pj);
         fenetre.pack();
+
+        //ETABLIR LA CONNEXION ENTRE LE DEUX JOUEUR
+        try{
+            Socket socket = new Socket("localhost", 1100);
+            pj.socket = socket;
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
 
         pj.lancerJeu();
         

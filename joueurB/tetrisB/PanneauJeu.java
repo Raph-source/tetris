@@ -22,7 +22,7 @@ public class PanneauJeu extends JPanel implements Runnable{
     private EcouteurToucheB ecouteurToucheB;
 
     //le socket
-    private Socket socket;
+    public Socket socket;
 
     public PanneauJeu(){
         this.setPreferredSize(new Dimension(LARGEUR, HAUTEUR));
@@ -67,14 +67,6 @@ public class PanneauJeu extends JPanel implements Runnable{
         double deltat = 0;
         long lastTime = System.nanoTime();
         long currentTime;
-
-        //ETABLIR LA CONNEXION ENTRE LE DEUX JOUEUR
-        try{
-            this.socket = new Socket("localhost", 1100);
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
         
         //lancer le game loop
         while(this.threadJeu != null){
