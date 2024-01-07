@@ -1,6 +1,9 @@
 package tetris;
 
 import java.awt.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+
 import javax.swing.*;
 
 import mino.joueurA.EcouteurToucheA;
@@ -21,6 +24,8 @@ public class PanneauJeu extends JPanel implements Runnable{
     private EcouteurToucheA ecouteurToucheA;    
     private EcouteurToucheB ecouteurToucheB;
 
+    //le socket
+    private Socket socket;
 
     public PanneauJeu(){
         this.setPreferredSize(new Dimension(LARGEUR, HAUTEUR));
@@ -66,12 +71,17 @@ public class PanneauJeu extends JPanel implements Runnable{
         long lastTime = System.nanoTime();
         long currentTime;
 
-        //tester la connexion entre les deux machines
-        /*
-            {
-                A FAIRE
-            }
-        */
+        //ETABLIR LA CONNEXION ENTRE LE DEUX JOUEUR
+
+        //Création du serveur
+        System.out.println("entente du joueur B");
+        try{
+            ServerSocket serveur = new ServerSocket(1100);
+            this.socket = serveur.accept();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
         
         //lancer le game loop
         while(this.threadJeu != null){
