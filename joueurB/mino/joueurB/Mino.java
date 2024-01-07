@@ -3,7 +3,7 @@ package mino.joueurB;
 import java.awt.*;
 
 import mino.Block;
-import tetris.ManageurJeuB;
+import tetrisA.ManageurJeuB;
 
 public class Mino {
     public Block block[] = new Block[4];    

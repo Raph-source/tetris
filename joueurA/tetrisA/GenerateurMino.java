@@ -1,10 +1,9 @@
-package tetris;
+package tetrisA;
 
 import java.util.Random;
 
 import mino.joueurA.EcouteurToucheA;
 import mino.joueurB.EcouteurToucheB;
-
 
 public class GenerateurMino {
     private ManageurJeuA mjA;    

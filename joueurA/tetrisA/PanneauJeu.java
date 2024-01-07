@@ -1,4 +1,4 @@
-package tetris;
+package tetrisA;
 
 import java.awt.*;
 import java.net.ServerSocket;
@@ -9,22 +9,21 @@ import javax.swing.*;
 import mino.joueurA.EcouteurToucheA;
 import mino.joueurB.EcouteurToucheB;
 
-
-
 public class PanneauJeu extends JPanel implements Runnable{
     public static final int LARGEUR = 1280;    
     public static final int HAUTEUR = 720;
     final int FPS = 60; // nombre de fois par seconde
     Thread threadJeu;
-    ManageurJeuA mjA;
-    ManageurJeuB mjB;
-    GenerateurMino generateurMino;
+    private ManageurJeuA mjA;
+    private ManageurJeuB mjB;
+    private GenerateurMino generateurMino;
 
     //ecouteur des touches
     private EcouteurToucheA ecouteurToucheA;    
     private EcouteurToucheB ecouteurToucheB;
 
     //le socket
+    private ServerSocket serveur;
     private Socket socket;
 
     public PanneauJeu(){
@@ -47,11 +46,11 @@ public class PanneauJeu extends JPanel implements Runnable{
         this.mjB = new ManageurJeuB(this.ecouteurToucheB);
 
         //le générateur de tetra mino
-        generateurMino = new GenerateurMino(this.mjA, this.mjB, this.ecouteurToucheA, this.ecouteurToucheB);
+        this.generateurMino = new GenerateurMino(this.mjA, this.mjB, this.ecouteurToucheA, this.ecouteurToucheB);
 
         //générer les premiers tetra mino
-        generateurMino.genererMino();            
-        generateurMino.genererMino();
+        this.generateurMino.genererMino();            
+        this.generateurMino.genererMino();
 
         this.mjA.premierMino();        
         this.mjB.premierMino();
@@ -70,19 +69,16 @@ public class PanneauJeu extends JPanel implements Runnable{
         double deltat = 0;
         long lastTime = System.nanoTime();
         long currentTime;
-
+        
         //ETABLIR LA CONNEXION ENTRE LE DEUX JOUEUR
-
-        //Création du serveur
-        System.out.println("entente du joueur B");
         try{
-            ServerSocket serveur = new ServerSocket(1100);
+            this.serveur = new ServerSocket(1100);
             this.socket = serveur.accept();
         }
         catch(Exception e){
             e.printStackTrace();
         }
-        
+
         //lancer le game loop
         while(this.threadJeu != null){
             currentTime = System.nanoTime();
@@ -98,7 +94,7 @@ public class PanneauJeu extends JPanel implements Runnable{
     }
 
     public void actualiser(){
-        if(this.ecouteurToucheA.pause == false && mjA.gameOver == false){//il faut ajouter le teste du game du deuxieme joueur
+        if(this.ecouteurToucheA.pause == false && this.mjA.gameOver == false){//il faut ajouter le teste du game du deuxieme joueur
             mjA.actualiser();
             mjB.actualiser();
         }

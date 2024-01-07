@@ -1,6 +1,8 @@
-package tetris;
+package tetrisB;
 
 import javax.swing.JFrame;
+
+import tetrisA.PanneauJeu;
 
 public class Tetris {
     public static void main(String[] args) {

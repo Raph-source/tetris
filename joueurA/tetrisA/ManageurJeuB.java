@@ -1,19 +1,18 @@
-package tetris;
+package tetrisA;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
 import mino.*;
-import mino.joueurA.EcouteurToucheA;
-import mino.joueurA.Mino;
+import mino.joueurB.EcouteurToucheB;
+import mino.joueurB.Mino;
+import tetrisB.PanneauJeu;
 
-public class ManageurJeuA {
+public class ManageurJeuB {
     //Block du jouer A
     final int LARGEUR = 360;
     final int  HAUTEUR = 600;
@@ -21,13 +20,10 @@ public class ManageurJeuA {
     public static int right_x;
     public static int top_y;
     public static int botton_y;
-    
-    //ecouteur des touoches
-    private EcouteurToucheA ecouteurToucheA;
 
     //la file de tetra mino
     public Queue<Mino> fileMino;
-    
+
     //mino courant
     public Mino minoCourant;
     final int MINO_START_X;    
@@ -47,10 +43,15 @@ public class ManageurJeuA {
     ArrayList<Integer> effectY = new ArrayList<>();
 
     //game over
-    boolean gameOver;
+    public boolean gameOver;
 
-    public ManageurJeuA(EcouteurToucheA ecouteurToucheA){
-        left_x = PanneauJeu.LARGEUR - 1200;
+    //ecouteur des touches
+    public EcouteurToucheB ecouteurToucheB;
+
+    public ManageurJeuB(EcouteurToucheB ecouteurToucheB){
+        //ecouteur des touches
+        this.ecouteurToucheB = new EcouteurToucheB();
+        left_x = PanneauJeu.LARGEUR - 400;
         right_x = left_x + LARGEUR;
         top_y = 50;
         botton_y = top_y + HAUTEUR;
@@ -63,15 +64,10 @@ public class ManageurJeuA {
 
         //la file de tetra mino
         this.fileMino = new LinkedList<>();
-
-        //ecouteur des touches
-        this.ecouteurToucheA = ecouteurToucheA;
-
     }
 
     //premier tetra mino
     public void premierMino(){
-
         //le tetra mino courant     
         this.minoCourant = this.fileMino.poll();
         /*
@@ -122,26 +118,19 @@ public class ManageurJeuA {
     }
 
     public void dessiner(Graphics2D g2){
-        //dessiner la partie du joueur A
+        //dessiner la partie du joueur B
         g2.setColor(Color.white);
         g2.setStroke(new BasicStroke(4f));
         g2.drawRect(left_x - 4, top_y - 4, LARGEUR + 8, HAUTEUR + 8);
 
-        //cadre du tetra mino suivant
-        int x = right_x + 100;        
-        int y = botton_y - 200;
-        g2.drawRect(x, y, 200, 200);
-        g2.setFont(new Font("Arial", Font.PLAIN, 30));
-        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        g2.drawString("SUIVANT", x + 60, y + 60);
+        //coordonée des messages (game over et pause)
+        int x;      
+        int y;
 
         //dessiner le mino courant
         if(this.minoCourant != null){
             this.minoCourant.dessiner(g2);
         }
-
-        //dessiner le mino suivant
-        minoSuivant.dessiner(g2);
         
         //dessiner les blocks static
         for(int i = 0; i < blocksMinoPrecedant.size(); i++){
@@ -158,7 +147,7 @@ public class ManageurJeuA {
             g2.drawString("GAME OVER", x, y);
         }
         //afficher pause
-        else if(this.ecouteurToucheA.pause){
+        else if(this.ecouteurToucheB.pause){
             g2.setColor(Color.yellow);
             g2.setFont(g2.getFont().deriveFont(50f));
 
@@ -230,3 +219,4 @@ public class ManageurJeuA {
         }
     }
 }
+

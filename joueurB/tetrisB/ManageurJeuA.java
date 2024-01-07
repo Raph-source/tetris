@@ -1,4 +1,4 @@
-package tetris;
+package tetrisB;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -12,6 +12,7 @@ import java.util.Queue;
 import mino.*;
 import mino.joueurA.EcouteurToucheA;
 import mino.joueurA.Mino;
+import tetrisA.PanneauJeu;
 
 public class ManageurJeuA {
     //Block du jouer A
