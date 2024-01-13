@@ -22,9 +22,10 @@ public class PanneauJeu extends JPanel implements Runnable{
     private EcouteurToucheB ecouteurToucheB;
     
     //le socket
-    public Socket socket;
+    private Socket socket;
 
-    public PanneauJeu(){
+    public PanneauJeu(Socket socket){
+        this.socket = socket;
         this.setPreferredSize(new Dimension(LARGEUR, HAUTEUR));
         this.setBackground(Color.black);
         this.setLayout(null);
@@ -44,7 +45,7 @@ public class PanneauJeu extends JPanel implements Runnable{
         this.mjB = new ManageurJeuB(this.ecouteurToucheB);
 
         //le générateur de tetra mino
-        this.generateurMino = new GenerateurMino(this.mjA, this.mjB, this.ecouteurToucheA, this.ecouteurToucheB);
+        this.generateurMino = new GenerateurMino(this.mjA, this.mjB, this.ecouteurToucheA, this.ecouteurToucheB, this.socket);
 
         //générer les premiers tetra mino
         this.generateurMino.genererMino();            
@@ -58,7 +59,6 @@ public class PanneauJeu extends JPanel implements Runnable{
     public void lancerJeu(){
         this.threadJeu = new Thread(this);
         
-
         this.threadJeu.start();
     }
 

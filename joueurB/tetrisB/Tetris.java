@@ -4,33 +4,47 @@ import java.net.Socket;
 
 import javax.swing.JFrame;
 
-import tetrisA.PanneauJeu;
-
 public class Tetris {
     public static void main(String[] args) {
-        JFrame fenetre  = new JFrame("Tetris");
+        Socket socket = null;
+        JFrame fenetre = new JFrame("Tetris B");
         fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         fenetre.setResizable(false);
-        
-        //ajout du panneau de jeu à la fenètre
-        PanneauJeu pj = new PanneauJeu();
-        fenetre.add(pj);
-        fenetre.pack();
 
         //ETABLIR LA CONNEXION ENTRE LE DEUX JOUEUR
         try{
-            Socket socket = new Socket("localhost", 1100);
-            pj.socket = socket;
+            socket = new Socket("localhost", 1100);
         }
         catch(Exception e){
             e.printStackTrace();
         }
 
-        pj.lancerJeu();
+        //ajout du panneau de jeu à la fenètre
+        PanneauJeu pj = new PanneauJeu(socket);
+        fenetre.add(pj);
+        fenetre.pack();
         
         fenetre.setLocationRelativeTo(null);
         fenetre.setVisible(true);
         
+        //demarer avec le premier mino
+        // pj.getMessage();        
+        // pj.getMessage();
+        // pj.startPremierMino();        
+        // pj.startPremierMino();
         
+        pj.lancerJeu();
+
+        // try{
+        //     Thread.sleep(2000);
+        // }
+        // catch(Exception e){
+        //     e.printStackTrace();
+        // }
+        
+        pj.actualiser();
+
+        fenetre.setLocationRelativeTo(null);
+        fenetre.setVisible(true);
     }
 }

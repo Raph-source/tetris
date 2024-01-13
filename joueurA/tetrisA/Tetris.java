@@ -7,26 +7,26 @@ import javax.swing.JFrame;
 
 public class Tetris {
     public static void main(String[] args) {
-        JFrame fenetre  = new JFrame("Tetris");
+        Socket socket = null;
+
+        JFrame fenetre  = new JFrame("Tetris A");
         fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         fenetre.setResizable(false);
-        
-        //ajout du panneau de jeu à la fenètre
-        PanneauJeu pj = new PanneauJeu();
-        fenetre.add(pj);
-        fenetre.pack();
 
         System.out.println("entente du joueur B");
         try{
             ServerSocket serveur = new ServerSocket(1100);
-            Socket socket = serveur.accept();
-            pj.socket = socket; 
+            socket = serveur.accept();
             System.out.println("joueur B connecté");
         }
         catch(Exception e){
             e.printStackTrace();
         }
-        
+        //ajout du panneau de jeu à la fenètre
+        PanneauJeu pj = new PanneauJeu(socket);
+        fenetre.add(pj);
+        fenetre.pack();
+
         pj.lancerJeu();
         
         fenetre.setLocationRelativeTo(null);

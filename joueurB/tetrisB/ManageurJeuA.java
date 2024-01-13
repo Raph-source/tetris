@@ -12,7 +12,6 @@ import java.util.Queue;
 import mino.*;
 import mino.joueurA.EcouteurToucheA;
 import mino.joueurA.Mino;
-import tetrisA.PanneauJeu;
 
 public class ManageurJeuA {
     //Block du jouer A
@@ -103,11 +102,7 @@ public class ManageurJeuA {
 
             //changer de tetra mino courant
             this.minoCourant = this.minoSuivant;
-            /*
-                {
-                    envoyer le mino courant au jouer B
-                }
-            */
+        
             this.minoCourant.setXY(MINO_START_X, MINO_START_Y);
 
             //generer un autre tetra mino suivant
@@ -142,7 +137,10 @@ public class ManageurJeuA {
         }
 
         //dessiner le mino suivant
-        minoSuivant.dessiner(g2);
+        if(this.minoCourant != null){
+            this.minoSuivant.dessiner(g2);
+        }
+        
         
         //dessiner les blocks static
         for(int i = 0; i < blocksMinoPrecedant.size(); i++){
